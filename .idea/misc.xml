@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/HelloSharedPrefs/app/src/main/res/layout/activity_main.xml" value="0.24583333333333332" />
+        <entry key="..\:/HelloSharedPrefs/app/src/main/res/layout/activity_setting.xml" value="0.2578125" />
+        <entry key="..\:/HelloSharedPrefs/app/src/main/res/xml/root_preferences.xml" value="0.2578125" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.4947916666666667" />
       </map>
     </option>

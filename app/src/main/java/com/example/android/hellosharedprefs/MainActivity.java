@@ -1,12 +1,19 @@
 package com.example.android.hellosharedprefs;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
     // Key for current color
     private final String COLOR_KEY = "color";
 
+    private SharedPreferences mPreferences;
+    private String sharedPrefFile = "myPrefs";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,16 +44,33 @@ public class MainActivity extends AppCompatActivity {
                 R.color.default_background);
 
         // Restore the saved instance state.
-        if (savedInstanceState != null) {
+//        if (savedInstanceState != null) {
+//
+//            mCount = savedInstanceState.getInt(COUNT_KEY);
+//            if (mCount != 0) {
+//                mShowCountTextView.setText(String.format("%s", mCount));
+//            }
+//
+//            mColor = savedInstanceState.getInt(COLOR_KEY);
+//            mShowCountTextView.setBackgroundColor(mColor);
+//        }
 
-            mCount = savedInstanceState.getInt(COUNT_KEY);
-            if (mCount != 0) {
-                mShowCountTextView.setText(String.format("%s", mCount));
-            }
+        mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
 
-            mColor = savedInstanceState.getInt(COLOR_KEY);
-            mShowCountTextView.setBackgroundColor(mColor);
-        }
+        mCount = mPreferences.getInt(COUNT_KEY, 0);
+        mShowCountTextView.setBackgroundColor(mColor);
+
+        mColor = mPreferences.getInt(COLOR_KEY, 0);
+        if (mColor != 0)
+        mShowCountTextView.setBackgroundColor(mColor);
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        Boolean switchPref = sharedPref.getBoolean ("example_switch", false);
+        String example_edittext = sharedPref.getString("example_edittext", "NoName");
+
+        Toast.makeText(this,"Hello "+example_edittext+ " you're not alone "+ switchPref.toString(),Toast.LENGTH_SHORT).show();
+
+
     }
 
     /**
@@ -101,5 +128,37 @@ public class MainActivity extends AppCompatActivity {
         mColor = ContextCompat.getColor(this,
                 R.color.default_background);
         mShowCountTextView.setBackgroundColor(mColor);
+    }
+
+    /**
+     * create onPause method
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putInt(COUNT_KEY, mCount);
+        editor.putInt(COLOR_KEY, mColor);
+        editor.commit();
+    }
+
+    /**
+     * tao nhanh 1 settings
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add("Settings");
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getTitle().equals("Settings"))
+        {
+            Intent intent = new Intent(this, SettingActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
