@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     // Key for current color
     private final String COLOR_KEY = "color";
 
+    // 1. Khai bao SharedPreference
     private SharedPreferences mPreferences;
     private String sharedPrefFile = "myPrefs";
 
@@ -44,31 +45,33 @@ public class MainActivity extends AppCompatActivity {
                 R.color.default_background);
 
         // Restore the saved instance state.
-//        if (savedInstanceState != null) {
-//
-//            mCount = savedInstanceState.getInt(COUNT_KEY);
-//            if (mCount != 0) {
-//                mShowCountTextView.setText(String.format("%s", mCount));
-//            }
-//
-//            mColor = savedInstanceState.getInt(COLOR_KEY);
-//            mShowCountTextView.setBackgroundColor(mColor);
-//        }
+        if (savedInstanceState != null) {
 
+            mCount = savedInstanceState.getInt(COUNT_KEY);
+            if (mCount != 0) {
+                mShowCountTextView.setText(String.format("%s", mCount));
+            }
+
+            mColor = savedInstanceState.getInt(COLOR_KEY);
+            mShowCountTextView.setBackgroundColor(mColor);
+        }
+
+        // 2. Khoi tao Preference
         mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
-
+        // 4. Lay ra Preference
         mCount = mPreferences.getInt(COUNT_KEY, 0);
-        mShowCountTextView.setBackgroundColor(mColor);
+        mShowCountTextView.setText(String.format("%s", mCount));
 
         mColor = mPreferences.getInt(COLOR_KEY, 0);
         if (mColor != 0)
-        mShowCountTextView.setBackgroundColor(mColor);
+            mShowCountTextView.setBackgroundColor(mColor);
 
+        // Lay ra Preference tu Setting
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         Boolean switchPref = sharedPref.getBoolean ("example_switch", false);
         String example_edittext = sharedPref.getString("example_edittext", "NoName");
 
-        Toast.makeText(this,"Hello "+example_edittext+ " you're not alone "+ switchPref.toString(),Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,"Hello "+ example_edittext+ " you're not alone "+ switchPref,Toast.LENGTH_SHORT).show();
 
 
     }
@@ -131,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * create onPause method
+     * 3. Tao ham onPause
      */
     @Override
     protected void onPause() {
@@ -140,11 +143,11 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = mPreferences.edit();
         editor.putInt(COUNT_KEY, mCount);
         editor.putInt(COLOR_KEY, mColor);
-        editor.commit();
+        editor.apply();
     }
 
     /**
-     * tao nhanh 1 settings
+     * Tao ra nhanh 1 Setting
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
